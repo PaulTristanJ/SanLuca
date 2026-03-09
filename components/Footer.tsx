@@ -2,22 +2,47 @@
 
 import { useState } from "react";
 import { colors, fonts } from "@/config/theme";
-import Logo from "@/components/ui/Logo";
 
-const HOURS = [
-  ["Lun – Vie", "13:00 – 23:00"],
-  ["Sábado", "12:00 – 00:00"],
-  ["Domingo", "12:00 – 22:00"],
-];
-
-const CONTACT = [
-  "Av. de la Convención 312",
-  "Col. Centro, Aguascalientes",
-  "+52 (449) 123 4567",
-  "info@sanluca.mx",
-];
-
-const SOCIAL = ["Instagram", "Facebook", "TripAdvisor"];
+function FooterColumn({
+  title,
+  lines,
+}: {
+  title: string;
+  lines: string[];
+}) {
+  return (
+    <div>
+      <div
+        style={{
+          fontFamily: fonts.primary,
+          fontSize: "0.62rem",
+          fontWeight: 800,
+          letterSpacing: "0.24em",
+          textTransform: "uppercase",
+          color: colors.peru,
+          marginBottom: 14,
+        }}
+      >
+        {title}
+      </div>
+      {lines.map((line) => (
+        <p
+          key={line}
+          style={{
+            fontFamily: fonts.primary,
+            fontSize: "0.88rem",
+            fontWeight: 400,
+            color: "rgba(245,241,232,0.35)",
+            margin: "0 0 4px",
+            lineHeight: 1.6,
+          }}
+        >
+          {line}
+        </p>
+      ))}
+    </div>
+  );
+}
 
 function SocialLink({ label }: { label: string }) {
   const [hovered, setHovered] = useState(false);
@@ -28,11 +53,11 @@ function SocialLink({ label }: { label: string }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         fontFamily: fonts.primary,
-        fontSize: "0.7rem",
+        fontSize: "0.62rem",
         fontWeight: 800,
-        color: hovered ? colors.peru : "rgba(245,241,232,0.3)",
+        color: hovered ? colors.peru : "rgba(245,241,232,0.25)",
         textDecoration: "none",
-        letterSpacing: "0.12em",
+        letterSpacing: "0.14em",
         textTransform: "uppercase",
         transition: "color 0.3s",
       }}
@@ -47,108 +72,83 @@ export default function Footer() {
     <footer
       style={{
         background: colors.dark,
-        borderTop: "1px solid rgba(186,132,60,0.1)",
-        padding: "56px 24px 28px",
+        borderTop: "1px solid rgba(186,132,60,0.08)",
+        padding:
+          "clamp(48px,6vw,72px) clamp(24px,5vw,80px) 28px",
       }}
     >
-      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+      <div style={{ maxWidth: 1400, margin: "0 auto" }}>
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: 36,
-            marginBottom: 44,
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: "clamp(32px,4vw,48px)",
+            marginBottom: 48,
           }}
         >
           {/* Brand */}
           <div>
-            <Logo size="sm" variant="cream" />
-            <p
+            <div
               style={{
                 fontFamily: fonts.primary,
+                fontWeight: 800,
+                fontSize: "1.4rem",
+                color: colors.peru,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                lineHeight: 0.85,
+                marginBottom: 16,
+              }}
+            >
+              SAN
+              <br />
+              LUCA
+            </div>
+            <div
+              style={{
+                fontFamily: fonts.script,
                 fontSize: "0.9rem",
-                fontWeight: 400,
-                color: "rgba(245,241,232,0.38)",
-                lineHeight: 1.7,
-                marginTop: 16,
+                color: colors.peru,
+                opacity: 0.6,
               }}
             >
-              Auténtica cocina italiana desde 1987. Donde cada plato cuenta
-              una historia.
-            </p>
+              Ristorante
+            </div>
           </div>
 
-          {/* Hours */}
-          <div>
-            <h4
-              style={{
-                fontFamily: fonts.primary,
-                fontSize: "0.7rem",
-                fontWeight: 800,
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: colors.peru,
-                marginBottom: 14,
-              }}
-            >
-              Horario
-            </h4>
-            {HOURS.map(([day, time]) => (
-              <div
-                key={day}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontFamily: fonts.primary,
-                  fontSize: "0.88rem",
-                  fontWeight: 400,
-                  color: "rgba(245,241,232,0.4)",
-                  marginBottom: 7,
-                }}
-              >
-                <span>{day}</span>
-                <span style={{ color: colors.cream }}>{time}</span>
-              </div>
-            ))}
-          </div>
+          <FooterColumn
+            title="Visítanos"
+            lines={[
+              "Av. de la Convención 312",
+              "Col. Centro",
+              "Aguascalientes, Ags.",
+            ]}
+          />
 
-          {/* Contact */}
-          <div>
-            <h4
-              style={{
-                fontFamily: fonts.primary,
-                fontSize: "0.7rem",
-                fontWeight: 800,
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: colors.peru,
-                marginBottom: 14,
-              }}
-            >
-              Contacto
-            </h4>
-            {CONTACT.map((line) => (
-              <p
-                key={line}
-                style={{
-                  fontFamily: fonts.primary,
-                  fontSize: "0.88rem",
-                  fontWeight: 400,
-                  color: "rgba(245,241,232,0.4)",
-                  margin: "0 0 5px",
-                }}
-              >
-                {line}
-              </p>
-            ))}
-          </div>
+          <FooterColumn
+            title="Horario"
+            lines={[
+              "Lun–Vie: 13:00–23:00",
+              "Sáb: 12:00–00:00",
+              "Dom: 12:00–22:00",
+            ]}
+          />
+
+          <FooterColumn
+            title="Contacto"
+            lines={[
+              "+52 (449) 123 4567",
+              "info@sanluca.mx",
+            ]}
+          />
         </div>
 
         {/* Bottom bar */}
         <div
           style={{
-            borderTop: "1px solid rgba(186,132,60,0.08)",
-            paddingTop: 22,
+            borderTop: "1px solid rgba(186,132,60,0.06)",
+            paddingTop: 20,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -156,21 +156,19 @@ export default function Footer() {
             gap: 12,
           }}
         >
-          <p
+          <span
             style={{
               fontFamily: fonts.primary,
-              fontSize: "0.78rem",
+              fontSize: "0.7rem",
               fontWeight: 400,
-              color: "rgba(245,241,232,0.25)",
-              margin: 0,
+              color: "rgba(245,241,232,0.2)",
             }}
           >
             © 2026 San Luca Ristorante
-          </p>
-          <div style={{ display: "flex", gap: 18 }}>
-            {SOCIAL.map((s) => (
-              <SocialLink key={s} label={s} />
-            ))}
+          </span>
+          <div style={{ display: "flex", gap: 20 }}>
+            <SocialLink label="Instagram" />
+            <SocialLink label="Facebook" />
           </div>
         </div>
       </div>

@@ -5,56 +5,61 @@ import { colors, fonts } from "@/config/theme";
 
 interface ButtonProps {
   children: React.ReactNode;
-  variant?: "primary" | "outline";
+  href?: string;
+  dark?: boolean;
   onClick?: () => void;
   style?: React.CSSProperties;
 }
 
 export default function Button({
   children,
-  variant = "primary",
+  href = "#",
+  dark = false,
   onClick,
   style = {},
 }: ButtonProps) {
   const [hovered, setHovered] = useState(false);
 
   const base: React.CSSProperties = {
+    display: "inline-block",
     fontFamily: fonts.primary,
-    fontSize: "0.82rem",
+    fontSize: "0.7rem",
     fontWeight: 800,
-    letterSpacing: "0.22em",
+    letterSpacing: "0.28em",
     textTransform: "uppercase",
-    padding: "15px 38px",
-    border: "none",
-    borderRadius: 0,
-    cursor: "pointer",
+    padding: "16px 44px",
+    background: dark ? (hovered ? colors.brown : colors.peru) : "transparent",
+    color: dark ? colors.white : hovered ? colors.peru : colors.cream,
+    border: dark ? "none" : `1.5px solid ${hovered ? colors.peru : "rgba(245,241,232,0.25)"}`,
+    textDecoration: "none",
     transition: "all 0.4s cubic-bezier(.25,.46,.45,.94)",
+    transform: hovered ? "translateY(-1px)" : "none",
+    boxShadow: dark && hovered ? "0 8px 28px rgba(186,132,60,0.3)" : "none",
+    cursor: "pointer",
+    ...style,
   };
 
-  const variants: Record<string, React.CSSProperties> = {
-    primary: {
-      background: hovered ? colors.brown : colors.peru,
-      color: colors.white,
-      boxShadow: hovered
-        ? "0 10px 30px rgba(186,132,60,0.35)"
-        : "0 4px 16px rgba(186,132,60,0.18)",
-      transform: hovered ? "translateY(-2px)" : "none",
-    },
-    outline: {
-      background: "transparent",
-      color: hovered ? colors.peru : colors.cream,
-      border: `2px solid ${hovered ? colors.peru : "rgba(245,241,232,0.3)"}`,
-    },
-  };
+  if (onClick) {
+    return (
+      <button
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onClick={onClick}
+        style={{ ...base, borderRadius: 0 }}
+      >
+        {children}
+      </button>
+    );
+  }
 
   return (
-    <button
+    <a
+      href={href}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={onClick}
-      style={{ ...base, ...variants[variant], ...style }}
+      style={base}
     >
       {children}
-    </button>
+    </a>
   );
 }

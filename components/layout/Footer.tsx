@@ -1,85 +1,177 @@
-import Link from "next/link";
-import { siteConfig, socialLinks } from "@/config/site";
+"use client";
 
-export function Footer() {
-  const currentYear = new Date().getFullYear();
+import { useState } from "react";
+import { colors, fonts } from "@/config/theme";
 
+function FooterColumn({
+  title,
+  lines,
+}: {
+  title: string;
+  lines: string[];
+}) {
+  return (
+    <div>
+      <div
+        style={{
+          fontFamily: fonts.primary,
+          fontSize: "0.62rem",
+          fontWeight: 800,
+          letterSpacing: "0.24em",
+          textTransform: "uppercase",
+          color: colors.peru,
+          marginBottom: 14,
+        }}
+      >
+        {title}
+      </div>
+      {lines.map((line) => (
+        <p
+          key={line}
+          style={{
+            fontFamily: fonts.primary,
+            fontSize: "0.88rem",
+            fontWeight: 400,
+            color: "rgba(245,241,232,0.35)",
+            margin: "0 0 4px",
+            lineHeight: 1.6,
+          }}
+        >
+          {line}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function SocialLink({ label }: { label: string }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <a
+      href="#"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        fontFamily: fonts.primary,
+        fontSize: "0.62rem",
+        fontWeight: 800,
+        color: hovered ? colors.peru : "rgba(245,241,232,0.25)",
+        textDecoration: "none",
+        letterSpacing: "0.14em",
+        textTransform: "uppercase",
+        transition: "color 0.3s",
+      }}
+    >
+      {label}
+    </a>
+  );
+}
+
+export default function Footer() {
   return (
     <footer
       style={{
-        borderTop: "1px solid #e5e5e5",
-        padding: "3rem 2rem",
-        maxWidth: "1200px",
-        margin: "0 auto",
+        background: colors.dark,
+        borderTop: "1px solid rgba(186,132,60,0.08)",
+        padding:
+          "clamp(48px,6vw,72px) clamp(24px,5vw,80px) 28px",
       }}
     >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "2rem",
-        }}
-      >
-        {/* Brand */}
-        <div>
-          <strong>{siteConfig.name}</strong>
-          <p style={{ color: "#666", fontSize: "0.875rem", marginTop: "0.5rem" }}>
-            Experiencia gastronómica de autor
-          </p>
+      <div style={{ maxWidth: 1400, margin: "0 auto" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: "clamp(32px,4vw,48px)",
+            marginBottom: 48,
+          }}
+        >
+          {/* Brand */}
+          <div>
+            <div
+              style={{
+                fontFamily: fonts.primary,
+                fontWeight: 800,
+                fontSize: "1.4rem",
+                color: colors.peru,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                lineHeight: 0.85,
+                marginBottom: 16,
+              }}
+            >
+              SAN
+              <br />
+              LUCA
+            </div>
+            <div
+              style={{
+                fontFamily: fonts.script,
+                fontSize: "0.9rem",
+                color: colors.peru,
+                opacity: 0.6,
+              }}
+            >
+              Ristorante
+            </div>
+          </div>
+
+          <FooterColumn
+            title="Visítanos"
+            lines={[
+              "Av. de la Convención 312",
+              "Col. Centro",
+              "Aguascalientes, Ags.",
+            ]}
+          />
+
+          <FooterColumn
+            title="Horario"
+            lines={[
+              "Lun–Vie: 13:00–23:00",
+              "Sáb: 12:00–00:00",
+              "Dom: 12:00–22:00",
+            ]}
+          />
+
+          <FooterColumn
+            title="Contacto"
+            lines={[
+              "+52 (449) 123 4567",
+              "info@sanluca.mx",
+            ]}
+          />
         </div>
 
-        {/* Legal links */}
-        <div>
-          <strong>Legal</strong>
-          <nav style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "0.5rem" }}>
-            <Link href="/privacidad" style={{ color: "#666", fontSize: "0.875rem", textDecoration: "none" }}>
-              Aviso de Privacidad
-            </Link>
-            <Link href="/terminos" style={{ color: "#666", fontSize: "0.875rem", textDecoration: "none" }}>
-              Términos y Condiciones
-            </Link>
-          </nav>
-        </div>
-
-        {/* Social */}
-        <div>
-          <strong>Redes Sociales</strong>
-          <nav style={{ display: "flex", gap: "1rem", marginTop: "0.5rem" }}>
-            {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "#666", fontSize: "0.875rem", textDecoration: "none" }}
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-        </div>
-
-        {/* CTA */}
-        <div>
-          <Link
-            href="#ubicaciones"
+        {/* Bottom bar */}
+        <div
+          style={{
+            borderTop: "1px solid rgba(186,132,60,0.06)",
+            paddingTop: 20,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 12,
+          }}
+        >
+          <span
             style={{
-              display: "inline-block",
-              padding: "0.75rem 1.5rem",
-              border: "1px solid #111",
-              borderRadius: "4px",
-              textDecoration: "none",
-              color: "#111",
+              fontFamily: fonts.primary,
+              fontSize: "0.7rem",
+              fontWeight: 400,
+              color: "rgba(245,241,232,0.2)",
             }}
           >
-            Reservar
-          </Link>
+            © 2026 San Luca Ristorante
+          </span>
+          <div style={{ display: "flex", gap: 20 }}>
+            <SocialLink label="Instagram" />
+            <SocialLink label="Facebook" />
+          </div>
         </div>
       </div>
-
-      <p style={{ color: "#999", fontSize: "0.75rem", marginTop: "2rem", textAlign: "center" }}>
-        &copy; {currentYear} {siteConfig.name}. Todos los derechos reservados.
-      </p>
     </footer>
   );
 }

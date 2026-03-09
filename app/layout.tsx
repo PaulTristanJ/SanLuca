@@ -1,28 +1,23 @@
-/* ═══════════════════════════════════════════════════════
-   app/layout.tsx — EJEMPLO DE INTEGRACIÓN
+/* ═══════════════════════════════════════════════════════════
+   app/layout.tsx — GUÍA DE INTEGRACIÓN
    
-   Este archivo muestra las líneas que debes AGREGAR 
-   a tu layout.tsx existente. NO reemplaces todo tu 
-   archivo, solo agrega lo que te falta.
-   ═══════════════════════════════════════════════════════ */
+   NO reemplaces tu layout.tsx completo.
+   Solo agrega las líneas marcadas con ✅
+   ═══════════════════════════════════════════════════════════ */
 
 import type { Metadata } from "next";
 
-// ✅ AGREGAR: importar los estilos de San Luca
+// ✅ AGREGAR: estilos globales de San Luca v2
 import "@/styles/san-luca.css";
 
-// ✅ AGREGAR: importar Google Font (Great Vibes para los textos script)
-// Opción A: con next/font (recomendado)
-// import { Great_Vibes } from "next/font/google";
-// const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "--font-great-vibes" });
-
-// ✅ AGREGAR: importar Navbar y Footer
+// ✅ AGREGAR: Navbar y Footer
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "San Luca Ristorante",
-  description: "Auténtica cocina italiana desde 1987",
+  title: "San Luca Ristorante — Auténtica Cocina Italiana",
+  description:
+    "Restaurante italiano premium en Aguascalientes. Cocina artesanal con ingredientes frescos y recetas de tres generaciones.",
 };
 
 export default function RootLayout({
@@ -43,7 +38,7 @@ export default function RootLayout({
         {/* ✅ AGREGAR: Navbar global */}
         <Navbar />
 
-        {/* Tu contenido existente */}
+        {/* Tu contenido existente (pages, rutas, etc.) */}
         <main>{children}</main>
 
         {/* ✅ AGREGAR: Footer global */}

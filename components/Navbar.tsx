@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { colors, fonts } from "@/config/theme";
 
 const NAV_LINKS = [
-  { label: "Inicio", href: "/" },
+  { label: "Filosofía", href: "#filosofia" },
   { label: "Menú", href: "/menu" },
-  { label: "Sobre Nosotros", href: "#about" },
-  { label: "Reservaciones", href: "#reservaciones" },
+  { label: "Experiencia", href: "#experiencia" },
+  { label: "Historia", href: "#historia" },
+  { label: "Reservar", href: "#reservar" },
   { label: "Contacto", href: "/contact" },
 ];
 
@@ -20,41 +21,34 @@ function NavLink({ label, href }: { label: string; href: string }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         fontFamily: fonts.primary,
-        fontSize: "0.72rem",
+        fontSize: "0.62rem",
         fontWeight: 800,
-        letterSpacing: "0.22em",
+        letterSpacing: "0.24em",
         textTransform: "uppercase",
-        color: hovered ? colors.peru : "rgba(245,241,232,0.75)",
+        color: hovered ? colors.peru : "rgba(245,241,232,0.6)",
         textDecoration: "none",
         transition: "color 0.3s",
-        position: "relative",
-        paddingBottom: 4,
       }}
     >
       {label}
-      <span
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: hovered ? "100%" : 0,
-          height: 1.5,
-          background: colors.peru,
-          transition: "width 0.3s",
-        }}
-      />
     </a>
   );
 }
 
 export default function Navbar() {
+  const [show, setShow] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const lastY = useRef(0);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handler);
+    const handler = () => {
+      const y = window.scrollY;
+      setShow(y < 100 || y < lastY.current);
+      setScrolled(y > 80);
+      lastY.current = y;
+    };
+    window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
@@ -66,20 +60,18 @@ export default function Navbar() {
         left: 0,
         right: 0,
         zIndex: 1000,
-        background: scrolled ? colors.dark : "rgba(28,38,40,0.55)",
-        backdropFilter: "blur(14px)",
-        transition: "all 0.5s",
-        borderBottom: scrolled
-          ? "1px solid rgba(186,132,60,0.12)"
-          : "none",
-        padding: scrolled ? "8px 0" : "16px 0",
+        transform: show ? "translateY(0)" : "translateY(-100%)",
+        background: scrolled ? "rgba(28,38,40,0.92)" : "transparent",
+        backdropFilter: scrolled ? "blur(16px)" : "none",
+        transition: "all 0.5s cubic-bezier(.25,.46,.45,.94)",
+        padding: scrolled ? "12px 0" : "24px 0",
       }}
     >
       <div
         style={{
-          maxWidth: 1200,
+          maxWidth: 1400,
           margin: "0 auto",
-          padding: "0 24px",
+          padding: "0 clamp(20px,4vw,48px)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -91,87 +83,88 @@ export default function Navbar() {
           style={{
             fontFamily: fonts.primary,
             fontWeight: 800,
-            fontSize: "1rem",
+            fontSize: "0.85rem",
             color: colors.peru,
-            letterSpacing: "0.14em",
+            letterSpacing: "0.16em",
             textTransform: "uppercase",
-            lineHeight: 0.9,
+            lineHeight: 0.85,
             textDecoration: "none",
           }}
         >
-          <span>SAN</span>
+          SAN
           <br />
-          <span>LUCA</span>
+          LUCA
         </a>
 
-        {/* Desktop Nav */}
-        <div className="nav-desk" style={{ display: "flex", gap: 32 }}>
+        {/* Desktop */}
+        <div
+          className="nav-desktop"
+          style={{
+            display: "flex",
+            gap: "clamp(20px,2.5vw,36px)",
+            alignItems: "center",
+          }}
+        >
           {NAV_LINKS.map((l) => (
             <NavLink key={l.label} {...l} />
           ))}
         </div>
 
-        {/* Mobile Toggle */}
+        {/* Mobile toggle */}
         <button
-          className="nav-mob"
+          className="nav-mobile-btn"
           onClick={() => setOpen(!open)}
           style={{
+            display: "none",
             background: "none",
             border: "none",
             cursor: "pointer",
-            padding: 8,
-            display: "none",
+            padding: 6,
           }}
-          aria-label="Abrir menú"
+          aria-label="Menú"
         >
-          <div
-            style={{
-              width: 22,
-              height: 2,
-              background: colors.cream,
-              marginBottom: 5,
-              transition: "0.3s",
-              transform: open
-                ? "rotate(45deg) translate(5px,5px)"
-                : "none",
-            }}
-          />
-          <div
-            style={{
-              width: 22,
-              height: 2,
-              background: colors.cream,
-              marginBottom: 5,
-              opacity: open ? 0 : 1,
-              transition: "0.3s",
-            }}
-          />
-          <div
-            style={{
-              width: open ? 22 : 16,
-              height: 2,
-              background: colors.peru,
-              transition: "0.3s",
-              transform: open
-                ? "rotate(-45deg) translate(5px,-5px)"
-                : "none",
-            }}
-          />
+          <svg width="24" height="14" viewBox="0 0 24 14" fill="none">
+            <line
+              x1="0" y1="1" x2="24" y2="1"
+              stroke={colors.cream}
+              strokeWidth="1.5"
+              style={{
+                transition: "0.3s",
+                transform: open ? "rotate(45deg) translate(4px,4px)" : "none",
+                transformOrigin: "center",
+              }}
+            />
+            <line
+              x1="0" y1="7" x2="24" y2="7"
+              stroke={colors.peru}
+              strokeWidth="1.5"
+              style={{ transition: "0.3s", opacity: open ? 0 : 1 }}
+            />
+            <line
+              x1="6" y1="13" x2="24" y2="13"
+              stroke={colors.cream}
+              strokeWidth="1.5"
+              style={{
+                transition: "0.3s",
+                transform: open ? "rotate(-45deg) translate(4px,-4px)" : "none",
+                transformOrigin: "center",
+              }}
+            />
+          </svg>
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       {open && (
         <div
-          className="nav-mob-menu"
+          className="nav-mobile-menu"
           style={{
-            background: colors.dark,
-            padding: 24,
+            background: "rgba(28,38,40,0.98)",
+            padding: "32px 24px",
             display: "flex",
             flexDirection: "column",
-            gap: 20,
+            gap: 24,
             alignItems: "center",
-            borderTop: "1px solid rgba(186,132,60,0.1)",
           }}
         >
           {NAV_LINKS.map((l) => (

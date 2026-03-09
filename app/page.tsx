@@ -1,23 +1,26 @@
-/* ═══════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════
    app/page.tsx — PÁGINA PRINCIPAL
    
-   Reemplaza o integra estas secciones en tu page.tsx
-   ═══════════════════════════════════════════════════════ */
+   Reemplaza tu page.tsx actual con esto.
+   Cada sección se importa como componente independiente.
+   ═══════════════════════════════════════════════════════════ */
 
 import Hero from "@/components/Hero";
-import About from "@/components/About";
-import MenuSection from "@/components/MenuSection";
-import Featured from "@/components/Featured";
-import Testimonials from "@/components/Testimonials";
+import Philosophy from "@/components/Philosophy";
+import FeaturedMenu from "@/components/FeaturedMenu";
+import Experience from "@/components/Experience";
+import ChefStory from "@/components/ChefStory";
+import ReservationCTA from "@/components/ReservationCTA";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <About />
-      <MenuSection />
-      <Featured />
-      <Testimonials />
+      <Philosophy />
+      <FeaturedMenu />
+      <Experience />
+      <ChefStory />
+      <ReservationCTA />
     </>
   );
 }

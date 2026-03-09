@@ -1,65 +1,40 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { colors, fonts } from "@/config/theme";
-import Logo from "@/components/ui/Logo";
+import { Texture, Label, GoldLine } from "@/components/ui/Editorial";
 import Button from "@/components/ui/Button";
-import { Divider } from "@/components/ui/SectionHead";
 
 export default function Hero() {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoaded(true), 100);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <section
       style={{
         minHeight: "100vh",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        background: colors.dark,
         position: "relative",
         overflow: "hidden",
-        background: `linear-gradient(170deg, ${colors.dark} 0%, #263234 50%, ${colors.dark} 100%)`,
       }}
     >
-      {/* Stone texture */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          opacity: 0.06,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='t'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t)'/%3E%3C/svg%3E")`,
-          pointerEvents: "none",
-        }}
-      />
+      <Texture />
 
-      {/* Decorative circles */}
-      <div
-        style={{
-          position: "absolute",
-          top: "8%",
-          right: "-6%",
-          width: 500,
-          height: 500,
-          borderRadius: "50%",
-          border: "1px solid rgba(186,132,60,0.06)",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "12%",
-          left: "-8%",
-          width: 380,
-          height: 380,
-          borderRadius: "50%",
-          border: "1px solid rgba(186,132,60,0.04)",
-        }}
-      />
-
-      {/* Radial accents */}
+      {/* Radial color accents */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(circle at 25% 75%, rgba(186,132,60,0.05) 0%, transparent 50%), radial-gradient(circle at 75% 25%, rgba(171,62,42,0.03) 0%, transparent 50%)",
+            "radial-gradient(ellipse at 30% 70%, rgba(186,132,60,0.04) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(171,62,42,0.03) 0%, transparent 60%)",
           pointerEvents: "none",
         }}
       />
@@ -67,112 +42,128 @@ export default function Hero() {
       {/* Content */}
       <div
         style={{
-          textAlign: "center",
+          position: "relative",
           zIndex: 1,
+          textAlign: "center",
           padding: "0 24px",
-          maxWidth: 700,
         }}
       >
+        {/* Top label */}
         <div
           style={{
-            fontFamily: fonts.script,
-            fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)",
-            color: colors.peru,
-            marginBottom: 24,
-            opacity: 0.8,
-            animation: "fadeUp 0.9s ease 0.2s both",
+            opacity: loaded ? 1 : 0,
+            transform: loaded ? "none" : "translateY(20px)",
+            transition: "all 1s ease 0.3s",
           }}
         >
-          Auténtica cocina italiana
+          <Label light>Auténtica cocina italiana</Label>
         </div>
 
-        <div style={{ animation: "fadeUp 0.9s ease 0.4s both" }}>
-          <Logo size="xl" variant="peru" />
-        </div>
-
+        {/* Logo */}
         <div
           style={{
-            margin: "32px 0",
-            animation: "fadeUp 0.9s ease 0.7s both",
+            margin: "40px 0 12px",
+            opacity: loaded ? 1 : 0,
+            transform: loaded ? "none" : "translateY(30px)",
+            transition: "all 1.2s cubic-bezier(.16,1,.3,1) 0.5s",
           }}
         >
-          <Divider color="rgba(186,132,60,0.35)" />
+          <div
+            style={{
+              fontFamily: fonts.primary,
+              fontWeight: 800,
+              fontSize: "clamp(4rem, 12vw, 10rem)",
+              color: colors.peru,
+              lineHeight: 0.82,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+            }}
+          >
+            SAN
+            <br />
+            LUCA
+          </div>
+          <div
+            style={{
+              fontFamily: fonts.script,
+              fontSize: "clamp(1.2rem, 3vw, 2rem)",
+              color: colors.peru,
+              opacity: 0.7,
+              marginTop: 12,
+            }}
+          >
+            Ristorante
+          </div>
         </div>
 
+        {/* Divider */}
+        <div
+          style={{
+            opacity: loaded ? 1 : 0,
+            transition: "opacity 1.2s ease 1.2s",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <GoldLine width={48} />
+        </div>
+
+        {/* Tagline */}
         <p
           style={{
             fontFamily: fonts.primary,
-            fontSize: "clamp(0.95rem, 1.8vw, 1.1rem)",
-            color: "rgba(245,241,232,0.5)",
-            lineHeight: 1.8,
+            fontSize: "clamp(0.85rem, 1.5vw, 1rem)",
             fontWeight: 400,
-            maxWidth: 450,
-            margin: "0 auto 36px",
-            animation: "fadeUp 0.9s ease 0.9s both",
+            color: "rgba(245,241,232,0.4)",
+            maxWidth: 380,
+            margin: "0 auto 44px",
+            lineHeight: 1.8,
+            letterSpacing: "0.04em",
+            opacity: loaded ? 1 : 0,
+            transform: loaded ? "none" : "translateY(15px)",
+            transition: "all 1s ease 1.4s",
           }}
         >
-          Donde la tradición italiana se encuentra con la pasión artesanal.
-          Cada plato cuenta una historia de familia.
+          Donde la tradición italiana se encuentra con la pasión artesanal
         </p>
 
+        {/* CTAs */}
         <div
           style={{
             display: "flex",
-            gap: 16,
+            gap: 14,
             justifyContent: "center",
             flexWrap: "wrap",
-            animation: "fadeUp 0.9s ease 1.1s both",
+            opacity: loaded ? 1 : 0,
+            transition: "opacity 1s ease 1.8s",
           }}
         >
-          <Button>Reservar Mesa</Button>
-          <Button variant="outline">Ver Menú</Button>
+          <Button dark href="#reservar">
+            Reservar Mesa
+          </Button>
+          <Button href="/menu">Descubrir el Menú</Button>
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll cue */}
       <div
         style={{
           position: "absolute",
-          bottom: 36,
+          bottom: 32,
           left: "50%",
           transform: "translateX(-50%)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 6,
-          animation: "pulse 2.5s ease infinite",
+          opacity: loaded ? 1 : 0,
+          transition: "opacity 1s ease 2.2s",
+          animation: "float 3s ease-in-out infinite",
         }}
       >
         <div
           style={{
             width: 1,
-            height: 36,
-            background: `linear-gradient(to bottom, transparent, ${colors.peru})`,
+            height: 48,
+            background: `linear-gradient(to bottom, transparent, rgba(186,132,60,0.5))`,
           }}
         />
-        <div
-          style={{
-            width: 18,
-            height: 28,
-            borderRadius: 9,
-            border: "1.5px solid rgba(186,132,60,0.35)",
-            position: "relative",
-          }}
-        >
-          <div
-            style={{
-              width: 3,
-              height: 7,
-              background: colors.peru,
-              borderRadius: 2,
-              position: "absolute",
-              top: 5,
-              left: "50%",
-              transform: "translateX(-50%)",
-              animation: "scrollDot 2s ease infinite",
-            }}
-          />
-        </div>
       </div>
     </section>
   );
