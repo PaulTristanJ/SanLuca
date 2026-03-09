@@ -94,7 +94,7 @@ export default function Footer() {
                 fontFamily: fonts.primary,
                 fontWeight: 800,
                 fontSize: "1.4rem",
-                color: colors.peru,
+                color: colors.cream,
                 lineHeight: 0.85,
                 marginBottom: 16,
               }}
