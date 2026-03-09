@@ -95,8 +95,6 @@ export default function Footer() {
                 fontWeight: 800,
                 fontSize: "1.4rem",
                 color: colors.peru,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
                 lineHeight: 0.85,
                 marginBottom: 16,
               }}

@@ -7,6 +7,8 @@ export const colors = {
 } as const;
 
 export const fonts = {
-  primary: "'DailyNews', serif",
-  script: "'Great Vibes', cursive",
+  primary: "'MontecatiniPro-AmpioMedium', serif",
+  secondary: "'DailyNews', serif",
+  
+  script: "'Gianduja-script', cursive",
 } as const;

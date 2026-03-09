@@ -82,12 +82,10 @@ export default function Navbar() {
           href="/"
           style={{
             fontFamily: fonts.primary,
-            fontWeight: 800,
+            fontWeight: 500,
             fontSize: "0.85rem",
-            color: colors.peru,
-            letterSpacing: "0.16em",
-            textTransform: "uppercase",
-            lineHeight: 0.85,
+            color: colors.cream,
+
             textDecoration: "none",
           }}
         >

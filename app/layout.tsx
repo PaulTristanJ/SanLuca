@@ -6,6 +6,7 @@
    ═══════════════════════════════════════════════════════════ */
 
 import type { Metadata } from "next";
+import { fonts } from "@/config/theme";
 
 // ✅ AGREGAR: estilos globales de San Luca v2
 import "@/styles/san-luca.css";
@@ -27,7 +28,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <head>
+      <head
+     >
         {/* ✅ AGREGAR: Google Font para texto script */}
         <link
           href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"

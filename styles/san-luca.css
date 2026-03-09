@@ -13,22 +13,31 @@
 }
 
 @font-face {
-  font-family: "DailyNews";
-  src: url("/fonts/DailyNews-ExtraBold.otf") format("opentype");
+  font-family: "MontecatiniPro-AmpioMedium";
+  src: url("/fonts/MontecatiniPro-AmpioMedium.ttf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gianduja-script";
+  src: url("/fonts/Gianduja Script.otf") format("opentype");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
 }
 
+
+
 /* ── Variables ── */
 :root {
   --color-dark: #1c2628;
-  --color-peru: #ba843c;
+  --color-peru: #335689;
   --color-brown: #ab3e2a;
   --color-cream: #f5f1e8;
   --color-white: #ffffff;
-  --font-primary: "DailyNews", serif;
-  --font-script: "Great Vibes", cursive;
+  --font-primary: "MontecatiniPro-AmpioMedium", serif;
+  --font-script: "Gianduja-script", cursive;
 }
 
 /* ── Reset ── */

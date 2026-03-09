@@ -34,7 +34,7 @@ export default function Hero() {
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(ellipse at 30% 70%, rgba(186,132,60,0.04) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(171,62,42,0.03) 0%, transparent 60%)",
+            "radial-gradient(ellipse at 30% 70%, rgb(51,86,137) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgb(51,86,137) 0%, transparent 60%)",
           pointerEvents: "none",
         }}
       />
@@ -71,12 +71,9 @@ export default function Hero() {
           <div
             style={{
               fontFamily: fonts.primary,
-              fontWeight: 800,
-              fontSize: "clamp(4rem, 12vw, 10rem)",
-              color: colors.peru,
+              fontSize: "10rem",
+              color: colors.cream,
               lineHeight: 0.82,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
             }}
           >
             SAN
@@ -87,7 +84,8 @@ export default function Hero() {
             style={{
               fontFamily: fonts.script,
               fontSize: "clamp(1.2rem, 3vw, 2rem)",
-              color: colors.peru,
+              color: colors.cream,
+              
               opacity: 0.7,
               marginTop: 12,
             }}

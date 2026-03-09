@@ -22,8 +22,8 @@ export default function Button({
 
   const base: React.CSSProperties = {
     display: "inline-block",
-    fontFamily: fonts.primary,
-    fontSize: "0.7rem",
+    fontFamily: fonts.secondary,
+    fontSize: "0.9rem",
     fontWeight: 800,
     letterSpacing: "0.28em",
     textTransform: "uppercase",
