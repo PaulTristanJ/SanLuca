@@ -121,10 +121,9 @@ export default function Philosophy() {
                 fontStyle: "italic",
               }}
             >
-              &ldquo;Cuidamos la historia de cada ingrediente para que tú solo disfrutes el momento. — se
-              siente.&rdquo;
+              &ldquo;Lo más exclusivo del mundo recorriendo continentes hasta llegar a tu mesa.&rdquo;
             </div>
-            <Label>— Familia Luca, desde 1987</Label>
+            <Label>— San Luca desde 2020</Label>
           </Reveal>
         </div>
       </div>

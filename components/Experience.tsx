@@ -6,21 +6,22 @@ import Reveal from "@/components/ui/Reveal";
 
 const PILLARS = [
   {
-    title: "Ingredientes Artesanales",
-    desc: "Seleccionados diariamente de productores locales y mercados italianos",
+    title: "Aguas de Nueva Zelanda",
+    desc: "Salmón Ora King: Textura sedosa y sabor profundo",
   },
   {
-    title: "Pasta Fresca Diaria",
-    desc: "Elaborada a mano cada mañana con técnicas de la Emilia-Romaña",
+    title: "Ensenada, B.C., México",
+    desc: "Totoaba, Lubina, Calamares, Almejas & Mejillones, ",
   },
   {
-    title: "Vinos de Reserva",
-    desc: "Carta curada con etiquetas de la Toscana, Piamonte y Sicilia",
+    title: "Océano Atlántico,",
+    desc: "Atún Aleta Azul: Corte selecto y jugoso; su grasa natural aporta untuosidad y sabor",
   },
   {
-    title: "Ambiente Íntimo",
-    desc: "Espacios diseñados para crear momentos memorables",
+    title: "Atlántico Oriental y Mediterráneo",
+    desc: "Pulpo Vulgaris: Carne tierna y jugosa con un sutil toque salino",
   },
+  
 ];
 
 export default function Experience() {
@@ -43,7 +44,7 @@ export default function Experience() {
         }}
       >
         <Reveal>
-          <Label>03 — L&apos;Esperienza</Label>
+          <Label> — Denominacion&apos;de origen</Label>
         </Reveal>
         <Reveal delay={0.1}>
           <h2
@@ -59,9 +60,9 @@ export default function Experience() {
               maxWidth: 600,
             }}
           >
-            Una Experiencia
+            El Origen
             <br />
-            <span style={{ color: colors.peru }}>Completa</span>
+            <span style={{ color: colors.peru }}>de la Excelencia</span>
           </h2>
         </Reveal>
 
