@@ -56,7 +56,7 @@ export default function Hero() {
             transition: "all 1s ease 0.3s",
           }}
         >
-          <Label light>Auténtica cocina italiana</Label>
+          <Label light>POR: RICARDO CAMACHO Y FRANCCESCA METTE</Label>
         </div>
 
         {/* Logo */}
@@ -122,7 +122,7 @@ export default function Hero() {
             transition: "all 1s ease 1.4s",
           }}
         >
-          Donde la tradición italiana se encuentra con la pasión artesanal
+          La mejor gastronomia del mundo en tu mesa
         </p>
 
         {/* CTAs */}
