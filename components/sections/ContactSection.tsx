@@ -5,6 +5,7 @@ import { colors, fonts } from "@/config/theme";
 import Button from "@/components/ui/Button";
 import { SectionHead, Divider } from "@/components/ui/SectionHead";
 
+
 /* ─── Types ─── */
 interface Location {
   id: string;
@@ -16,9 +17,9 @@ interface Location {
 
 /* ─── Hours Data ─── */
 const HOURS = [
-  { day: "Lunes – Viernes", time: "13:00 – 23:00" },
-  { day: "Sábado", time: "12:00 – 00:00" },
-  { day: "Domingo", time: "12:00 – 22:00" },
+  { day: "Lunes – Sabado", time: "8:00 – 00:00" },
+
+  { day: "Domingo", time: "8:00 – 21:00" },
 ];
 
 /* ─── Shared Input Style ─── */
@@ -353,11 +354,7 @@ export default function ContactPage() {
 
   /* ── Info cards from selected location ── */
   const sel = locations.find((l) => l.id === form.locationId);
-  const infoCards = [
-    { icon: "📍", label: "Dirección", lines: [sel?.address || "Aguascalientes, Ags."] },
-    { icon: "📞", label: "Teléfono", lines: [sel?.phone || "+52 (449) 123 4567"] },
-    { icon: "✉️", label: "Correo", lines: [sel?.email || "info@sanluca.mx"] },
-  ];
+
 
   /* ═══ RENDER ═══ */
   return (
@@ -401,17 +398,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── Info Cards ── */}
-      <section style={{ background: colors.dark, padding: "0 24px 80px" }}>
-        <div style={{
-          maxWidth: 1000, margin: "0 auto",
-          display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 16,
-        }}>
-          {infoCards.map((item) => (
-            <InfoCard key={item.label} {...item} />
-          ))}
-        </div>
-      </section>
+
 
       {/* ── Form + Hours ── */}
       <section style={{ background: colors.cream, padding: "clamp(64px, 10vw, 100px) 24px", position: "relative" }}>
@@ -513,7 +500,7 @@ export default function ContactPage() {
                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='t'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t)'/%3E%3C/svg%3E")`,
               }} />
               <div style={{ position: "relative", textAlign: "center" }}>
-                <div style={{ fontSize: "2rem", marginBottom: 8 }}>📍</div>
+                <div style={{ fontSize: "2rem", marginBottom: 8 }}></div>
                 <p style={{
                   fontFamily: fonts.primary, fontSize: "0.8rem", fontWeight: 800,
                   letterSpacing: "0.18em", textTransform: "uppercase", color: colors.peru, margin: "0 0 6px",

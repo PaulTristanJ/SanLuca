@@ -1,22 +1,33 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { colors, fonts } from "@/config/theme";
 
 const NAV_LINKS = [
   { label: "Filosofía", href: "#filosofia" },
   { label: "Menú", href: "/menu" },
-  { label: "Experiencia", href: "#experiencia" },
+  { label: "Experiencia", href: "/experiencia" },
   { label: "Historia", href: "#historia" },
-  { label: "Reservar", href: "#reservar" },
+  { label: "Reservar", href: "/reservation" },
   { label: "Contacto", href: "/contact" },
 ];
 
-function NavLink({ label, href }: { label: string; href: string }) {
+function NavLink({
+  label,
+  href,
+  onClick,
+}: {
+  label: string;
+  href: string;
+  onClick?: () => void;
+}) {
   const [hovered, setHovered] = useState(false);
+
   return (
-    <a
+    <Link
       href={href}
+      onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -31,7 +42,7 @@ function NavLink({ label, href }: { label: string; href: string }) {
       }}
     >
       {label}
-    </a>
+    </Link>
   );
 }
 
@@ -48,6 +59,7 @@ export default function Navbar() {
       setScrolled(y > 80);
       lastY.current = y;
     };
+
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
@@ -78,21 +90,20 @@ export default function Navbar() {
         }}
       >
         {/* Logo */}
-        <a
+        <Link
           href="/"
           style={{
             fontFamily: fonts.primary,
             fontWeight: 500,
             fontSize: "0.85rem",
             color: colors.cream,
-
             textDecoration: "none",
           }}
         >
           SAN
           <br />
           LUCA
-        </a>
+        </Link>
 
         {/* Desktop */}
         <div
@@ -123,28 +134,44 @@ export default function Navbar() {
         >
           <svg width="24" height="14" viewBox="0 0 24 14" fill="none">
             <line
-              x1="0" y1="1" x2="24" y2="1"
+              x1="0"
+              y1="1"
+              x2="24"
+              y2="1"
               stroke={colors.cream}
               strokeWidth="1.5"
               style={{
                 transition: "0.3s",
-                transform: open ? "rotate(45deg) translate(4px,4px)" : "none",
+                transform: open
+                  ? "rotate(45deg) translate(4px,4px)"
+                  : "none",
                 transformOrigin: "center",
               }}
             />
             <line
-              x1="0" y1="7" x2="24" y2="7"
+              x1="0"
+              y1="7"
+              x2="24"
+              y2="7"
               stroke={colors.peru}
               strokeWidth="1.5"
-              style={{ transition: "0.3s", opacity: open ? 0 : 1 }}
+              style={{
+                transition: "0.3s",
+                opacity: open ? 0 : 1,
+              }}
             />
             <line
-              x1="6" y1="13" x2="24" y2="13"
+              x1="6"
+              y1="13"
+              x2="24"
+              y2="13"
               stroke={colors.cream}
               strokeWidth="1.5"
               style={{
                 transition: "0.3s",
-                transform: open ? "rotate(-45deg) translate(4px,-4px)" : "none",
+                transform: open
+                  ? "rotate(-45deg) translate(4px,-4px)"
+                  : "none",
                 transformOrigin: "center",
               }}
             />
@@ -166,7 +193,11 @@ export default function Navbar() {
           }}
         >
           {NAV_LINKS.map((l) => (
-            <NavLink key={l.label} {...l} />
+            <NavLink
+              key={l.label}
+              {...l}
+              onClick={() => setOpen(false)}
+            />
           ))}
         </div>
       )}

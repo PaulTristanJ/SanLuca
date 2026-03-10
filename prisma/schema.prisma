@@ -19,13 +19,13 @@ model Dish {
   id          String   @id @default(cuid())
   name        String
   description String?
-  price       Decimal  @db.Decimal(10,2)
+  price       Float
   imageUrl    String?
   available   Boolean  @default(true)
-  position    Int?     // orden dentro de la categoría
+  position    Int?
 
   categoryId  String
-  category    MenuCategory @relation(fields: [categoryId], references: [id])
+  category    MenuCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now())
 }
