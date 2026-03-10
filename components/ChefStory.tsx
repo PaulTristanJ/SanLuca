@@ -40,7 +40,7 @@ export default function ChefStory() {
         >
           {/* Left — Large headline + Italian quote */}
           <Reveal>
-            <Label light>04 — Il Cuore</Label>
+            <Label light>02 — Il Cuore</Label>
             <h2
               style={{
                 fontFamily: fonts.primary,
