@@ -60,7 +60,7 @@ export default async function ComidaCategoryPage({ params }: PageProps) {
                         fontWeight: 800,
                         color: "rgba(201,150,74,0.04)",
                         textTransform: "uppercase",
-                        letterSpacing: "0.1em",
+
                         userSelect: "none",
                         pointerEvents: "none",
                     }}
@@ -72,7 +72,6 @@ export default async function ComidaCategoryPage({ params }: PageProps) {
                     style={{
                         fontFamily: fonts.primary,
                         fontSize: "0.65rem",
-                        letterSpacing: "0.35em",
                         textTransform: "uppercase",
                         color: colors.peru,
                         margin: "0 0 0.75rem",
@@ -87,7 +86,7 @@ export default async function ComidaCategoryPage({ params }: PageProps) {
                         fontFamily: fonts.primary,
                         fontSize: "clamp(2.5rem, 6vw, 5rem)",
                         fontWeight: 700,
-                        letterSpacing: "0.1em",
+
                         textTransform: "uppercase",
                         color: "#ffffff",
                         margin: "0 0 0.5rem",
@@ -101,7 +100,7 @@ export default async function ComidaCategoryPage({ params }: PageProps) {
                     style={{
                         fontFamily: fonts.primary,
                         fontSize: "0.75rem",
-                        letterSpacing: "0.2em",
+
                         textTransform: "uppercase",
                         color: "rgba(255,255,255,0.3)",
                         margin: 0,
@@ -133,7 +132,7 @@ export default async function ComidaCategoryPage({ params }: PageProps) {
                             style={{
                                 fontFamily: fonts.primary,
                                 fontSize: "0.8rem",
-                                letterSpacing: "0.25em",
+
                                 textTransform: "uppercase",
                             }}
                         >
@@ -176,7 +175,7 @@ export default async function ComidaCategoryPage({ params }: PageProps) {
                         style={{
                             fontFamily: fonts.primary,
                             fontSize: "0.72rem",
-                            letterSpacing: "0.28em",
+
                             textTransform: "uppercase",
                             color: colors.peru,
                             textDecoration: "none",

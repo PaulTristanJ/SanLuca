@@ -7,35 +7,92 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================
+// MENÚ
+// ============================================
+
 model MenuCategory {
   id        String   @id @default(cuid())
   name      String
-  position  Int?     // orden en el menú
+  position  Int?
   dishes    Dish[]
   createdAt DateTime @default(now())
 }
 
 model Dish {
-  id          String   @id @default(cuid())
+  id          String       @id @default(cuid())
   name        String
   description String?
   price       Float
   imageUrl    String?
-  available   Boolean  @default(true)
+  available   Boolean      @default(true)
   position    Int?
-
   categoryId  String
   category    MenuCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  createdAt   DateTime @default(now())
+  createdAt   DateTime     @default(now())
 }
 
+// ============================================
+// USUARIOS
+// ============================================
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  phone        String?
+  passwordHash String?       // null si usa OAuth
+  role         Role          @default(CUSTOMER)
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+// ============================================
+// RESERVACIONES
+// ============================================
+
 model Reservation {
-  id        String   @id @default(cuid())
-  name      String
-  phone     String
-  guests    Int
-  date      DateTime
-  notes     String?
-  createdAt DateTime @default(now())
+  id          String            @id @default(cuid())
+
+  // ── Quién reserva ──────────────────────
+  userId      String?           // null = reserva como invitado
+  user        User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // ── Datos del contacto (guest o override) ──
+  guestName   String?           // nombre si no hay cuenta
+  guestEmail  String?           // email de confirmación
+  guestPhone  String?           // teléfono de contacto
+
+  // ── Detalles de la reserva ─────────────
+  date        DateTime          // fecha + hora del turno
+  guests      Int               // número de comensales
+  occasion    String?           // cumpleaños, aniversario, etc.
+  notes       String?           // peticiones especiales
+
+  // ── Estado ─────────────────────────────
+  status      ReservationStatus @default(PENDING)
+  confirmedAt DateTime?         // cuando admin confirma
+  cancelledAt DateTime?         // cuando se cancela
+  cancelReason String?          // motivo de cancelación
+
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([date])
+  @@index([status])
+  @@index([userId])
+}
+
+enum ReservationStatus {
+  PENDING       // recién creada, sin confirmar
+  CONFIRMED     // confirmada por el restaurante
+  CANCELLED     // cancelada (por cliente o admin)
+  COMPLETED     // el cliente ya asistió
+  NO_SHOW       // no se presentó
 }

@@ -1,16 +1,16 @@
 "use client";
 
 // ─────────────────────────────────────────────
-//  components/menu/ComidaSectionsClient.tsx
-//  Página 2 bottom + Página 3 PDF
-//  Tabs de sección + grid de categorías con imagen
+//  components/menu/BrunchSectionsClient.tsx
+//  Tabs BRUNCH / BEBIDAS + grid de categorías
+//  mismo sistema que ComidaSectionsClient
 // ─────────────────────────────────────────────
 
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { fonts, colors } from "@/config/theme";
-import { COMIDA_GROUPS } from "@/config/Menustructure";
+import { BRUNCH_GROUPS } from "@/config/Menustructure";
 
 type DbCategory = {
     id: string;
@@ -18,20 +18,17 @@ type DbCategory = {
     imageUrl?: string | null;
 };
 
-type ComidaSectionsClientProps = {
+type BrunchSectionsClientProps = {
     dbCategories: DbCategory[];
 };
 
-const TAB_GROUPS = COMIDA_GROUPS.filter((g) => g.categories.length > 0);
-
-export default function ComidaSectionsClient({
+export default function BrunchSectionsClient({
     dbCategories,
-}: ComidaSectionsClientProps) {
+}: BrunchSectionsClientProps) {
     const [activeTab, setActiveTab] = useState(0);
 
-    const currentGroup = TAB_GROUPS[activeTab];
+    const currentGroup = BRUNCH_GROUPS[activeTab];
 
-    // Merge static structure with DB image data
     const categoriesWithImages = currentGroup.categories.map((cat) => {
         const dbMatch = dbCategories.find(
             (d) =>
@@ -45,36 +42,27 @@ export default function ComidaSectionsClient({
     });
 
     return (
-        <section
-            style={{
-                background: "#1a2628",
-                paddingBottom: "5rem",
-            }}
-        >
-            {/* ── FILTER TABS PILL BAR ── */}
+        <section style={{ background: "#1a2628", paddingBottom: "5rem" }}>
+
+            {/* ── TABS PILL BAR: BRUNCH / BEBIDAS ── */}
             <div
                 style={{
                     display: "flex",
                     justifyContent: "center",
-                    paddingTop: "0",
-                    paddingBottom: "4rem",
-                    paddingLeft: "1.5rem",
-                    paddingRight: "1.5rem",
+                    padding: "0 1.5rem 4rem",
                 }}
             >
                 <div
                     style={{
                         display: "flex",
-                        flexWrap: "wrap",
-                        justifyContent: "center",
-                        gap: "4px",
                         background: "rgba(255,255,255,0.05)",
                         borderRadius: "999px",
                         padding: "5px",
                         border: "1px solid rgba(255,255,255,0.08)",
+                        gap: 0,
                     }}
                 >
-                    {TAB_GROUPS.map((group, i) => {
+                    {BRUNCH_GROUPS.map((group, i) => {
                         const isActive = activeTab === i;
                         return (
                             <button
@@ -86,7 +74,7 @@ export default function ComidaSectionsClient({
                                     letterSpacing: "0.28em",
                                     textTransform: "uppercase",
                                     fontWeight: 600,
-                                    padding: "0.8rem 1.75rem",
+                                    padding: "0.8rem 2.25rem",
                                     borderRadius: "999px",
                                     border: "none",
                                     cursor: "pointer",
@@ -103,7 +91,7 @@ export default function ComidaSectionsClient({
                 </div>
             </div>
 
-            {/* ── CATEGORY IMAGE GRID (Página 3 PDF) ── */}
+            {/* ── CATEGORY IMAGE GRID ── */}
             <div
                 style={{
                     maxWidth: "1320px",
@@ -114,23 +102,23 @@ export default function ComidaSectionsClient({
                 <div
                     style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(4, 1fr)",
+                        gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 280px), 1fr))",
                         gridAutoRows: "220px",
                         gap: "6px",
                     }}
                 >
-                    {categoriesWithImages.map((cat, i) => (
-                        <CategoryImageCard
+                    {categoriesWithImages.map((cat) => (
+                        <BrunchCategoryCard
                             key={cat.slug}
                             name={cat.name}
+                            description={cat.description}
                             imageUrl={cat.imageUrl}
-                            href={`/menu/comida/${cat.slug}`}
-                            isLarge={i === 3 || i === 7} // Cada 4 cartas, la última fila ocupa más
+                            href={`/menu/brunch/${cat.slug}`}
                         />
                     ))}
                 </div>
 
-                {/* San Luca footer logo */}
+                {/* San Luca footer */}
                 <div
                     style={{
                         textAlign: "center",
@@ -144,23 +132,23 @@ export default function ComidaSectionsClient({
                             fontFamily: fonts.primary,
                             fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
                             fontWeight: 800,
-
                             textTransform: "uppercase",
                             color: "#ffffff",
-                            margin: "0 0 0.15rem",
+
                         }}
                     >
                         SAN LUCA
                     </p>
                     <p
                         style={{
+
                             fontFamily: fonts.script,
                             fontSize: "clamp(1rem, 2vw, 1.4rem)",
                             color: "rgba(255,255,255,0.5)",
                             margin: 0,
                         }}
                     >
-                        Restaurante
+                        Brunch
                     </p>
                 </div>
             </div>
@@ -168,25 +156,22 @@ export default function ComidaSectionsClient({
     );
 }
 
-// ── Single category image card ──────────────
-function CategoryImageCard({
+// ── Single card ──────────────────────────────
+function BrunchCategoryCard({
     name,
+    description,
     imageUrl,
     href,
-    isLarge,
 }: {
     name: string;
+    description?: string;
     imageUrl?: string | null;
     href: string;
-    isLarge?: boolean;
 }) {
     const [hovered, setHovered] = useState(false);
 
     return (
-        <Link
-            href={href}
-            style={{ textDecoration: "none", display: "block" }}
-        >
+        <Link href={href} style={{ textDecoration: "none", display: "block", height: "100%" }}>
             <div
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
@@ -195,11 +180,10 @@ function CategoryImageCard({
                     width: "100%",
                     height: "100%",
                     overflow: "hidden",
-                    cursor: "pointer",
                     background: "#253032",
+                    cursor: "pointer",
                 }}
             >
-                {/* Image */}
                 {imageUrl ? (
                     <Image
                         src={imageUrl}
@@ -218,12 +202,11 @@ function CategoryImageCard({
                         style={{
                             position: "absolute",
                             inset: 0,
-                            background: `linear-gradient(135deg, #253032 0%, #1a2628 100%)`,
+                            background: "linear-gradient(135deg, #253032 0%, #1a2628 100%)",
                         }}
                     />
                 )}
 
-                {/* Overlay */}
                 <div
                     style={{
                         position: "absolute",
@@ -233,7 +216,6 @@ function CategoryImageCard({
                     }}
                 />
 
-                {/* Category name */}
                 <div
                     style={{
                         position: "absolute",
@@ -251,11 +233,25 @@ function CategoryImageCard({
                             textTransform: "uppercase",
                             color: "#ffffff",
                             margin: 0,
-                            textShadow: "0 1px 4px rgba(0,0,0,0.5)",
                         }}
                     >
                         {name.toUpperCase()}
                     </p>
+                    {description && (
+                        <p
+                            style={{
+                                fontFamily: fonts.primary,
+                                fontSize: "0.7rem",
+                                color: "rgba(255,255,255,0.45)",
+                                margin: "4px 0 0",
+                                opacity: hovered ? 1 : 0,
+                                transform: hovered ? "translateY(0)" : "translateY(4px)",
+                                transition: "all 0.3s ease",
+                            }}
+                        >
+                            {description}
+                        </p>
+                    )}
                 </div>
             </div>
         </Link>

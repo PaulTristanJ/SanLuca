@@ -1,14 +1,23 @@
 // ─────────────────────────────────────────────
 //  app/menu/brunch/[category]/page.tsx
-//  Platillos de brunch — mismo estilo PDF p.4
+//  Platillos brunch — identidad azul PDF p.5
 // ─────────────────────────────────────────────
 
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMenuCategoryById } from "@/lib/db";
-import { fonts, colors } from "@/config/theme";
-import DishCardGold from "@/components/menu/DishCardGold";
+import { fonts } from "@/config/theme";
+import DishCardBlue from "@/components/menu/DishCardBlue";
+
+// Paleta brunch
+const B = {
+    bg: "#f0ebe0",
+    text: "#1e3a52",
+    accent: "#3d6b8c",
+    textMuted: "rgba(30,58,82,0.45)",
+    border: "rgba(30,58,82,0.1)",
+};
 
 type PageProps = {
     params: Promise<{ category: string }>;
@@ -20,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (!data) return { title: "Categoría no encontrada" };
     return {
         title: `${data.name} | Brunch | San Luca`,
-        description: `Platillos de brunch en ${data.name}`,
+        description: `Platillos de brunch — ${data.name}`,
     };
 }
 
@@ -33,13 +42,13 @@ export default async function BrunchCategoryPage({ params }: PageProps) {
     return (
         <main
             style={{
-                background: "#1a2628",
+                background: B.bg,
                 minHeight: "100vh",
                 paddingTop: "100px",
                 paddingBottom: "5rem",
             }}
         >
-            {/* ── TÍTULO ── */}
+            {/* ── TÍTULO — estilo PDF p.5 ── */}
             <div
                 style={{
                     textAlign: "center",
@@ -56,12 +65,13 @@ export default async function BrunchCategoryPage({ params }: PageProps) {
                         alignItems: "center",
                         justifyContent: "center",
                         fontFamily: fonts.primary,
-                        fontSize: "clamp(5rem, 14vw, 11rem)",
+                        fontSize: "clamp(5rem, 14vw, 12rem)",
                         fontWeight: 800,
-                        color: "rgba(201,150,74,0.04)",
+                        color: "rgba(61,107,140,0.06)",
                         textTransform: "uppercase",
                         userSelect: "none",
                         pointerEvents: "none",
+                        letterSpacing: "-0.02em",
                     }}
                 >
                     {data.name}
@@ -73,7 +83,7 @@ export default async function BrunchCategoryPage({ params }: PageProps) {
                         fontSize: "0.65rem",
                         letterSpacing: "0.35em",
                         textTransform: "uppercase",
-                        color: colors.peru,
+                        color: B.accent,
                         margin: "0 0 0.75rem",
                         position: "relative",
                     }}
@@ -81,15 +91,17 @@ export default async function BrunchCategoryPage({ params }: PageProps) {
                     San Luca · Brunch
                 </p>
 
+                {/* BRUNCH big label — PDF p.5 */}
                 <h1
                     style={{
                         fontFamily: fonts.primary,
-                        fontSize: "clamp(2.5rem, 6vw, 5rem)",
-                        fontWeight: 700,
-                        letterSpacing: "0.1em",
+                        fontSize: "clamp(2.5rem, 8vw, 7rem)",
+                        fontWeight: 800,
+                        letterSpacing: "0.06em",
                         textTransform: "uppercase",
-                        color: "#ffffff",
-                        margin: "0 0 0.5rem",
+                        color: B.text,
+                        margin: "0 0 0.35rem",
+                        lineHeight: 1,
                         position: "relative",
                     }}
                 >
@@ -100,9 +112,9 @@ export default async function BrunchCategoryPage({ params }: PageProps) {
                     style={{
                         fontFamily: fonts.primary,
                         fontSize: "0.75rem",
-                        letterSpacing: "0.2em",
+                        letterSpacing: "0.22em",
                         textTransform: "uppercase",
-                        color: "rgba(255,255,255,0.3)",
+                        color: B.textMuted,
                         margin: 0,
                         position: "relative",
                     }}
@@ -112,7 +124,7 @@ export default async function BrunchCategoryPage({ params }: PageProps) {
                 </p>
             </div>
 
-            {/* ── DISH GRID DORADO ── */}
+            {/* ── GRID AZUL — PDF p.5 ── */}
             <div
                 style={{
                     maxWidth: "1320px",
@@ -128,7 +140,7 @@ export default async function BrunchCategoryPage({ params }: PageProps) {
                             fontSize: "0.8rem",
                             letterSpacing: "0.25em",
                             textTransform: "uppercase",
-                            color: "rgba(255,255,255,0.3)",
+                            color: B.textMuted,
                             padding: "5rem",
                         }}
                     >
@@ -144,14 +156,13 @@ export default async function BrunchCategoryPage({ params }: PageProps) {
                         }}
                     >
                         {data.dishes.map((dish) => (
-                            <DishCardGold
+                            <DishCardBlue
                                 key={dish.id}
                                 name={dish.name}
                                 description={dish.description ?? null}
                                 price={Number(dish.price)}
                                 weight={(dish as any).weight ?? null}
                                 imageUrl={dish.imageUrl ?? null}
-                                allergens={(dish as any).allergens ?? null}
                             />
                         ))}
                     </div>
@@ -161,21 +172,21 @@ export default async function BrunchCategoryPage({ params }: PageProps) {
                     style={{
                         marginTop: "4rem",
                         paddingTop: "2rem",
-                        borderTop: "1px solid rgba(255,255,255,0.07)",
+                        borderTop: `1px solid ${B.border}`,
                     }}
                 >
                     <Link
-                        href="/menu/brunch"
+                        href="/menu"
                         style={{
                             fontFamily: fonts.primary,
                             fontSize: "0.72rem",
                             letterSpacing: "0.28em",
                             textTransform: "uppercase",
-                            color: colors.peru,
+                            color: B.accent,
                             textDecoration: "none",
                         }}
                     >
-                        ← Volver a Brunch
+                        ← Volver al menú
                     </Link>
                 </div>
             </div>
