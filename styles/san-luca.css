@@ -33,7 +33,7 @@
 /* ── Variables ── */
 :root {
   --color-dark: #1c2628;
-  --color-peru: #335689;
+  --color-peru: #ba843c;
   --color-brown: #ab3e2a;
   --color-cream: #f5f1e8;
   --color-white: #ffffff;
@@ -114,5 +114,269 @@ textarea::placeholder {
 @media (min-width: 769px) {
   .nav-mobile-menu {
     display: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   RESERVATION FORM
+   ══════════════════════════════════════════════ */
+
+.rf-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  padding-top: 80px;
+  background: var(--color-dark);
+  font-family: var(--font-primary);
+}
+
+/* ── Left panel ── */
+.rf-left {
+  padding: 16px clamp(40px, 6vw, 80px) clamp(40px, 6vw, 80px);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-self: start;
+}
+
+.rf-hero-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 300;
+  color: var(--color-cream);
+  text-transform: uppercase;
+  line-height: 1.05;
+  margin: 0;
+  margin-left: 70px;
+}
+
+.rf-hero-sub {
+  font-size: 0.75rem;
+  color: rgba(245, 241, 232, 0.5);
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  margin-left: 70px;
+}
+
+.rf-image-wrapper {
+  width: 70%;
+  align-self: center;
+  border-radius: 16px;
+  position: relative;
+}
+
+.rf-image-box {
+  width: 100%;
+  aspect-ratio: 4/5;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #2a2f2e;
+  position: relative;
+}
+
+.rf-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* ── Section switch ── */
+.rf-switch-label {
+  font-size: 0.10rem;
+  color: rgba(245, 241, 232, 0.5);
+  text-transform: uppercase;
+  margin-bottom: 0.10rem;
+}
+
+.rf-switch-overlay {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% + 50px);
+  z-index: 2;
+
+}
+
+.rf-switch-track {
+  display: flex;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(179, 127, 57);
+  border-radius: 999px;
+  padding: 4px;
+  position: relative;
+  border: 4px solid rgba(179, 127, 57);
+}
+
+.rf-switch-thumb {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border-radius: 999px;
+  background: var(--color-peru);
+  transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  pointer-events: none;
+
+}
+
+.rf-switch-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 15px 4px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s;
+
+}
+
+.rf-switch-btn--active {
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+/* ── Right panel ── */
+.rf-right {
+  background: #1b2224;
+  border: 4px solid rgba(205, 164, 61, 0.4);
+  border-radius: 40px;
+  margin: 24px 40px;
+  padding: clamp(24px, 3vw, 36px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-self: start;
+  margin-top: 50px;
+}
+
+.rf-form-title {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 300;
+  color: var(--color-cream);
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.rf-form-sub {
+  font-size: 0.7rem;
+  color: rgba(245, 241, 232, 0.4);
+  text-transform: uppercase;
+  margin-top: 0.3rem;
+}
+
+.rf-divider {
+  height: 1px;
+  background: rgba(186, 132, 60, 0.2);
+}
+
+.rf-label {
+  font-size: 0.65rem;
+  color: var(--color-cream);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+  display: block;
+  opacity: 0.7;
+}
+
+.rf-input,
+.rf-select,
+.rf-textarea {
+  width: 100%;
+  background: rgba(245, 241, 232, 0.04);
+  border: 1px solid rgba(245, 241, 232, 0.15);
+  border-radius: 8px;
+  color: var(--color-cream);
+  font-size: 0.95rem;
+  padding: 13px 16px;
+  outline: none;
+  font-family: var(--font-primary);
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.rf-input:focus,
+.rf-select:focus,
+.rf-textarea:focus {
+  border-color: rgba(186, 132, 60, 0.7);
+}
+
+.rf-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23f5f1e8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.rf-textarea {
+  resize: none;
+  min-height: 88px;
+}
+
+.rf-row-three {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.rf-submit {
+  width: 100%;
+  background: var(--color-peru);
+  color: var(--color-dark);
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  transition: background 0.2s;
+  margin-top: 0.25rem;
+}
+
+.rf-submit:hover:not(:disabled) {
+  background: #a8722f;
+}
+
+.rf-submit:disabled {
+  background: #7a5a28;
+  cursor: not-allowed;
+}
+
+.rf-error {
+  background: rgba(220, 80, 80, 0.1);
+  border: 1px solid rgba(220, 80, 80, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #f08080;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .rf-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .rf-right {
+    margin: 16px;
+  }
+
+  .rf-row-three {
+    grid-template-columns: 1fr 1fr;
   }
 }

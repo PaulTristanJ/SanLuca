@@ -8,40 +8,15 @@ datasource db {
 }
 
 // ============================================
-// MENÚ
-// ============================================
-
-model MenuCategory {
-  id        String   @id @default(cuid())
-  name      String
-  position  Int?
-  dishes    Dish[]
-  createdAt DateTime @default(now())
-}
-
-model Dish {
-  id          String       @id @default(cuid())
-  name        String
-  description String?
-  price       Float
-  imageUrl    String?
-  available   Boolean      @default(true)
-  position    Int?
-  categoryId  String
-  category    MenuCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  createdAt   DateTime     @default(now())
-}
-
-// ============================================
-// USUARIOS
+// USUARIOS & AUTH
 // ============================================
 
 model User {
   id           String        @id @default(cuid())
   name         String
   email        String        @unique
-  phone        String?
-  passwordHash String?       // null si usa OAuth
+  phone        String
+  passwordHash String
   role         Role          @default(CUSTOMER)
   reservations Reservation[]
   createdAt    DateTime      @default(now())
@@ -54,45 +29,162 @@ enum Role {
 }
 
 // ============================================
+// MENÚ
+// ============================================
+
+model MenuCategory {
+  id        String   @id @default(cuid())
+  name      String
+  position  Int?
+  dishes    Dish[]
+  createdAt DateTime @default(now())
+}
+
+model Dish {
+  id               String            @id @default(cuid())
+  name             String
+  description      String?
+  price            Float
+  imageUrl         String?
+  available        Boolean           @default(true)
+  position         Int?
+  categoryId       String
+  category         MenuCategory      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  reservationItems ReservationItem[] // ← platillos pre-ordenados que usan este dish
+  createdAt        DateTime          @default(now())
+}
+
+// ============================================
+// SECCIONES Y MESAS
+// ============================================
+
+model Section {
+  id          String   @id @default(cuid())
+  name        String   // "Terraza", "Planta Alta", "Salón"
+  description String?
+  isActive    Boolean  @default(true)
+  tables      Table[]
+  createdAt   DateTime @default(now())
+}
+
+model Table {
+  id           String        @id @default(cuid())
+  number       Int           // número visible: 1, 2, 3...
+  capacity     Int           // máximo de personas
+  sectionId    String
+  section      Section       @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  isActive     Boolean       @default(true)
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+
+  @@unique([number, sectionId])
+  @@index([sectionId])
+}
+
+// ============================================
 // RESERVACIONES
 // ============================================
 
 model Reservation {
-  id          String            @id @default(cuid())
+  id                String            @id @default(cuid())
 
-  // ── Quién reserva ──────────────────────
-  userId      String?           // null = reserva como invitado
-  user        User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  // ── Cuenta que hizo la reserva ─────────
+  userId            String
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // ── Datos del contacto (guest o override) ──
-  guestName   String?           // nombre si no hay cuenta
-  guestEmail  String?           // email de confirmación
-  guestPhone  String?           // teléfono de contacto
+  // ── Titular de la reserva ──────────────
+  // Independiente del perfil del usuario,
+  // por si reserva a nombre de otra persona.
+  guestName         String
+  guestPhone        String
 
-  // ── Detalles de la reserva ─────────────
-  date        DateTime          // fecha + hora del turno
-  guests      Int               // número de comensales
-  occasion    String?           // cumpleaños, aniversario, etc.
-  notes       String?           // peticiones especiales
+  // ── Mesa asignada ──────────────────────
+  tableId           String?           // se asigna al confirmar
+  table             Table?            @relation(fields: [tableId], references: [id], onDelete: SetNull)
 
-  // ── Estado ─────────────────────────────
-  status      ReservationStatus @default(PENDING)
-  confirmedAt DateTime?         // cuando admin confirma
-  cancelledAt DateTime?         // cuando se cancela
-  cancelReason String?          // motivo de cancelación
+  // ── Detalles del turno ─────────────────
+  date              DateTime          // fecha + hora exacta
+  duration          Int               @default(90)  // minutos que ocupa la mesa
+  guests            Int               // número de comensales
 
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  // ── Preferencias del cliente ───────────
+  sectionPreference String?           // "Terraza" | "Planta Alta" | "Salón" (no garantizada)
+  occasion          String?           // cumpleaños, aniversario, cena de negocios...
+  notes             String?           // peticiones especiales
+
+  // ── Pre-orden de platillos ─────────────
+  wantsPreOrder     Boolean           @default(false) // ¿quiere agregar platillos?
+  preOrderLocked    Boolean           @default(false) // true después de completar el pago
+
+  // ── Pago ───────────────────────────────
+  paymentStatus     PaymentStatus     @default(UNPAID)
+  paymentIntentId   String?           // ID de Stripe
+  amountPaid        Decimal?          @db.Decimal(10, 2)
+
+  // ── Check-in con QR ────────────────────
+  // El QR contiene la URL: /checkin/[qrToken]
+  // El staff abre esa URL y confirma la llegada.
+  qrToken           String            @unique @default(cuid())
+  checkedInAt       DateTime?         // cuándo llegó el cliente
+  checkedInBy       String?           // userId del staff que escaneó
+
+  // ── Estado y ciclo de vida ─────────────
+  status            ReservationStatus @default(PENDING)
+  confirmedAt       DateTime?
+  cancelledAt       DateTime?
+  cancelReason      String?
+
+  // ── Platillos pre-ordenados ────────────
+  items             ReservationItem[]
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 
   @@index([date])
   @@index([status])
   @@index([userId])
+  @@index([tableId])
+  @@index([qrToken])
 }
 
+// ============================================
+// PRE-ORDEN DE PLATILLOS
+// Tabla puente entre Reservation y Dish.
+// Se crea DESPUÉS de que la reserva existe,
+// solo si wantsPreOrder = true.
+// ============================================
+
+model ReservationItem {
+  id            String      @id @default(cuid())
+  reservationId String
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  dishId        String
+  dish          Dish        @relation(fields: [dishId], references: [id])
+  quantity      Int         @default(1)
+  notes         String?     // ej: "sin cilantro", "término medio"
+  unitPrice     Float       // precio del platillo al momento de reservar
+
+  createdAt     DateTime    @default(now())
+
+  @@index([reservationId])
+  @@index([dishId])
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
 enum ReservationStatus {
-  PENDING       // recién creada, sin confirmar
-  CONFIRMED     // confirmada por el restaurante
-  CANCELLED     // cancelada (por cliente o admin)
-  COMPLETED     // el cliente ya asistió
-  NO_SHOW       // no se presentó
+  PENDING     // recién creada, esperando confirmación + pago
+  CONFIRMED   // pago recibido, reserva confirmada → se genera QR
+  CANCELLED   // cancelada por cliente o admin
+  COMPLETED   // cliente asistió (check-in realizado)
+  NO_SHOW     // no se presentó
+}
+
+enum PaymentStatus {
+  UNPAID      // no ha pagado
+  PAID        // pago completado
+  REFUNDED    // reembolso realizado
+  PARTIAL     // pagó el depósito pero no los platillos
 }
