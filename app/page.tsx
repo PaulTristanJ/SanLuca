@@ -10,7 +10,7 @@ import Philosophy from "@/components/Philosophy";
 import FeaturedMenu from "@/components/FeaturedMenu";
 
 import ChefStory from "@/components/ChefStory";
-import ReservarPage from "./reservation/page";
+import Origin from "@/components/Origin";
 
 export default function HomePage() {
   return (
@@ -18,6 +18,7 @@ export default function HomePage() {
       <Hero />
       <Philosophy />
       <ChefStory />
+      <Origin />
     </>
   );
 }

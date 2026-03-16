@@ -102,8 +102,7 @@ export default function Hero() {
               fontFamily: fonts.primary,
               fontSize: "10rem",
               color: colors.cream,
-              lineHeight: 0.82,
-
+              lineHeight: 0.82
             }}
           >
             SAN

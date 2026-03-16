@@ -11,9 +11,8 @@ import { fonts } from "@/config/theme";
 // ✅ AGREGAR: estilos globales de San Luca v2
 import "@/styles/san-luca.css";
 
-// ✅ AGREGAR: Navbar y Footer
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+// ✅ AGREGAR: LayoutWrapper (maneja Navbar y Footer condicionalmente)
+import { LayoutWrapper } from "@/components/LayoutWrapper";
 
 export const metadata: Metadata = {
   title: "San Luca Ristorante — Auténtica Cocina Italiana",
@@ -37,14 +36,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {/* ✅ AGREGAR: Navbar global */}
-        <Navbar />
-
-        {/* Tu contenido existente (pages, rutas, etc.) */}
-        <main>{children}</main>
-
-        {/* ✅ AGREGAR: Footer global */}
-        <Footer />
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );

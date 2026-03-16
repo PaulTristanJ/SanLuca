@@ -8,7 +8,7 @@ export async function GET() {
 
     const serialized = categories.map((cat) => ({
       ...cat,
-      items: cat.items.map((item) => ({
+      dishes: cat.dishes.map((item) => ({   // ← mantiene el nombre dishes
         ...item,
         price: Number(item.price),
       })),
@@ -16,7 +16,7 @@ export async function GET() {
 
     return NextResponse.json<ApiResponse<MenuCategory[]>>({
       success: true,
-      data: serialized as MenuCategory[],
+      data: serialized as MenuCategory[],  // ← ahora sí coincide con el tipo
     });
   } catch (error) {
     console.error("[API] GET /api/menu error:", error);
