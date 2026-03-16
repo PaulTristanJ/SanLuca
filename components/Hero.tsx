@@ -4,6 +4,19 @@ import { useState, useEffect } from "react";
 import { colors, fonts } from "@/config/theme";
 import { Texture, Label, GoldLine } from "@/components/ui/Editorial";
 import Button from "@/components/ui/Button";
+import Image from "next/image";
+
+const images = [
+  "/images/1b.png",
+  "/images/2b.png",
+  "/images/3b.png",
+  "/images/4b.png",
+  "/images/5b.png",
+  "/images/6b.png",
+  "/images/7b.png"
+];
+const randomImage = images[Math.floor(Math.random() * images.length)];
+
 
 export default function Hero() {
   const [loaded, setLoaded] = useState(false);
@@ -26,17 +39,31 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
+
       <Texture />
 
       {/* Radial color accents */}
+
+      <div className="relative w-full aspect-[9/16]">
+        <Image
+          src={randomImage}
+          alt="Comunidad de la fundación participando en actividades"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+          quality={85}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80" />      </div>
       <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "radial-gradient(ellipse at 30% 70%, rgb(51,86,137) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgb(51,86,137) 0%, transparent 60%)",
-          pointerEvents: "none",
-        }}
+
+      // style={{
+      //   position: "absolute",
+      //   inset: 0,
+      //   background:
+      //     "radial-gradient(ellipse at 30% 70%, rgb(51,86,137) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgb(51,86,137) 0%, transparent 60%)",
+      //   pointerEvents: "none",
+      // }}
       />
 
       {/* Content */}
@@ -51,9 +78,11 @@ export default function Hero() {
         {/* Top label */}
         <div
           style={{
-            opacity: loaded ? 1 : 0,
-            transform: loaded ? "none" : "translateY(20px)",
-            transition: "all 1s ease 0.3s",
+            fontFamily: fonts.primary,
+            fontSize: "10rem",
+            color: colors.cream,
+            lineHeight: 0.82,
+            textShadow: "0 4px 20px rgba(0,0,0,0.6)",
           }}
         >
           <Label light>POR: RICARDO CAMACHO Y FRANCCESCA METTE</Label>
@@ -73,7 +102,7 @@ export default function Hero() {
               fontFamily: fonts.primary,
               fontSize: "10rem",
               color: colors.cream,
-              lineHeight: 0.82,
+              lineHeight: 0.82
             }}
           >
             SAN
@@ -85,7 +114,7 @@ export default function Hero() {
               fontFamily: fonts.script,
               fontSize: "clamp(1.2rem, 3vw, 2rem)",
               color: colors.cream,
-              
+
               opacity: 0.7,
               marginTop: 12,
             }}
@@ -122,8 +151,12 @@ export default function Hero() {
             transition: "all 1s ease 1.4s",
           }}
         >
+<<<<<<< HEAD
           La mejor gastronomia del mundo en tu mesa
         </p>
+=======
+          La mejor gastronomia del mundo en tu mesa        </p>
+>>>>>>> d28167aba32c3f2a35f115729458b9eb272d46e4
 
         {/* CTAs */}
         <div
@@ -136,12 +169,13 @@ export default function Hero() {
             transition: "opacity 1s ease 1.8s",
           }}
         >
-          <Button dark href="#reservar">
+          <Button dark href="/reservation">
             Reservar Mesa
           </Button>
           <Button href="/menu">Descubrir el Menú</Button>
+
         </div>
-      </div>
+      </div >
 
       {/* Scroll cue */}
       <div
@@ -153,7 +187,8 @@ export default function Hero() {
           opacity: loaded ? 1 : 0,
           transition: "opacity 1s ease 2.2s",
           animation: "float 3s ease-in-out infinite",
-        }}
+        }
+        }
       >
         <div
           style={{
@@ -162,7 +197,7 @@ export default function Hero() {
             background: `linear-gradient(to bottom, transparent, rgba(186,132,60,0.5))`,
           }}
         />
-      </div>
-    </section>
+      </div >
+    </section >
   );
 }

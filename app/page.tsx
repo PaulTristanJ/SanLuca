@@ -8,19 +8,17 @@
 import Hero from "@/components/Hero";
 import Philosophy from "@/components/Philosophy";
 import FeaturedMenu from "@/components/FeaturedMenu";
-import Experience from "@/components/Experience";
+
 import ChefStory from "@/components/ChefStory";
-import ReservationCTA from "@/components/ReservationCTA";
+import Origin from "@/components/Origin";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
       <Philosophy />
-      <FeaturedMenu />
-      <Experience />
       <ChefStory />
-      <ReservationCTA />
+      <Origin />
     </>
   );
 }

@@ -1,29 +1,56 @@
+// lib/validations.ts
 import { z } from "zod";
 
-// ============================================
-// CONTACT FORM
-// ============================================
-export const contactFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, "El nombre debe tener al menos 2 caracteres")
-    .max(100, "El nombre no puede exceder 100 caracteres"),
-  email: z.string().email("Ingresa un email válido"),
-  locationId: z.string().min(1, "Selecciona una sucursal"),
-  message: z
-    .string()
-    .min(10, "El mensaje debe tener al menos 10 caracteres")
-    .max(2000, "El mensaje no puede exceder 2000 caracteres"),
+// ── Auth ──────────────────────────────────────
+export const registerSchema = z.object({
+  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
+  email: z.string().email("Email inválido"),
+  phone: z.string().regex(/^[\d\s\+\-\(\)]{8,20}$/, "Número de teléfono inválido"),
+  birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Formato de fecha inválido").optional(),
+  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+  confirmPassword: z.string(),
+}).refine((d) => d.password === d.confirmPassword, {
+  message: "Las contraseñas no coinciden",
+  path: ["confirmPassword"],
 });
 
-export type ContactFormInput = z.infer<typeof contactFormSchema>;
+export const loginSchema = z.object({
+  email: z.string().email("Email inválido"),
+  password: z.string().min(1, "Ingresa tu contraseña"),
+});
 
-// ============================================
-// API RESPONSE
-// ============================================
-export const apiResponseSchema = <T extends z.ZodType>(dataSchema: T) =>
-  z.object({
-    success: z.boolean(),
-    data: dataSchema.optional(),
-    error: z.string().optional(),
-  });
+export type RegisterInput = z.infer<typeof registerSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;
+
+export const createReservationSchema = z.object({
+  // Titular de la reserva
+  guestName: z
+    .string()
+    .min(2, "El nombre debe tener al menos 2 caracteres")
+    .max(100),
+  guestPhone: z
+    .string()
+    .regex(/^[\d\s\+\-\(\)]{8,20}$/, "Número de teléfono inválido"),
+
+  // Detalles del turno
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Formato de fecha inválido (YYYY-MM-DD)"),
+  time: z
+    .string()
+    .regex(/^\d{2}:\d{2}$/, "Formato de hora inválido (HH:MM)"),
+  guests: z
+    .number()
+    .int()
+    .min(1, "Mínimo 1 persona")
+    .max(20, "Máximo 20 personas"),
+
+  // Preferencias
+  sectionPreference: z
+    .enum(["Terraza", "Planta Alta", "Salón"])
+    .optional(),
+  occasion: z.string().max(100).optional(),
+  notes: z.string().max(500).optional(),
+});
+
+export type CreateReservationInput = z.infer<typeof createReservationSchema>;

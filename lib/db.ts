@@ -2,74 +2,61 @@ import { prisma } from "./prisma";
 import type { ContactFormData } from "@/types/forms";
 
 // ============================================
-// LOCATIONS
-// ============================================
-export async function getActiveLocations() {
-  return prisma.location.findMany({
-    where: { isActive: true },
-    orderBy: { order: "asc" },
-  });
-}
-
-export async function getLocationById(id: string) {
-  return prisma.location.findUnique({ where: { id } });
-}
-
-// ============================================
 // MENU
 // ============================================
+
 export async function getMenuCategories() {
   return prisma.menuCategory.findMany({
-    where: { isActive: true },
+    orderBy: { position: "asc" },
     include: {
-      items: {
-        where: { isAvailable: true },
-        orderBy: { order: "asc" },
+      dishes: {
+        where: { available: true },
+        orderBy: { position: "asc" },
       },
     },
-    orderBy: { order: "asc" },
   });
 }
 
-export async function getMenuCategoryBySlug(slug: string) {
+export async function getMenuCategoryById(id: string) {
   return prisma.menuCategory.findUnique({
-    where: { slug },
+    where: { id },
     include: {
-      items: {
-        where: { isAvailable: true },
-        orderBy: { order: "asc" },
+      dishes: {
+        where: { available: true },
+        orderBy: { position: "asc" },
       },
     },
   });
 }
 
-export async function getFeaturedItems() {
-  return prisma.menuItem.findMany({
-    where: { isFeatured: true, isAvailable: true },
-    include: { category: true },
-    orderBy: { order: "asc" },
+// ============================================
+// FEATURED DISHES
+// ============================================
+
+export async function getFeaturedDishes() {
+  return prisma.dish.findMany({
+    where: { available: true },
+    orderBy: { position: "asc" },
   });
 }
 
-// ============================================
-// CONTACT
-// ============================================
-export async function createContactMessage(data: ContactFormData) {
-  return prisma.contactMessage.create({ data });
-}
+// // ============================================
+// // CONTACT
+// // ============================================
 
-export async function getContactMessages(options?: {
-  locationId?: string;
-  isRead?: boolean;
-  limit?: number;
-}) {
-  return prisma.contactMessage.findMany({
-    where: {
-      ...(options?.locationId && { locationId: options.locationId }),
-      ...(options?.isRead !== undefined && { isRead: options.isRead }),
-    },
-    include: { location: true },
-    orderBy: { createdAt: "desc" },
-    take: options?.limit,
-  });
-}
+// export async function createContactMessage(data: ContactFormData) {
+//   return prisma.contactMessage.create({ data });
+// }
+
+// export async function getContactMessages(options?: {
+//   isRead?: boolean;
+//   limit?: number;
+// }) {
+//   return prisma.contactMessage.findMany({
+//     where: {
+//       ...(options?.isRead !== undefined && { isRead: options.isRead }),
+//     },
+//     orderBy: { createdAt: "desc" },
+//     take: options?.limit,
+//   });
+// }

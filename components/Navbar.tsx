@@ -1,22 +1,33 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { colors, fonts } from "@/config/theme";
 
 const NAV_LINKS = [
   { label: "Filosofía", href: "#filosofia" },
   { label: "Menú", href: "/menu" },
-  { label: "Experiencia", href: "#experiencia" },
   { label: "Historia", href: "#historia" },
-  { label: "Reservar", href: "#reservar" },
+  { label: "Reservar", href: "/reservation" },
   { label: "Contacto", href: "/contact" },
 ];
 
-function NavLink({ label, href }: { label: string; href: string }) {
+function NavLink({
+  label,
+  href,
+  onClick,
+}: {
+  label: string;
+  href: string;
+  onClick?: () => void;
+}) {
   const [hovered, setHovered] = useState(false);
+
   return (
-    <a
+    <Link
       href={href}
+      onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -31,15 +42,24 @@ function NavLink({ label, href }: { label: string; href: string }) {
       }}
     >
       {label}
-    </a>
+    </Link>
   );
 }
 
 export default function Navbar() {
+  const router = useRouter();
   const [show, setShow] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
   const lastY = useRef(0);
+
+  useEffect(() => {
+    const syncAuth = () => setUserName(localStorage.getItem("userName"));
+    syncAuth();
+    window.addEventListener("storage", syncAuth);
+    return () => window.removeEventListener("storage", syncAuth);
+  }, []);
 
   useEffect(() => {
     const handler = () => {
@@ -48,9 +68,17 @@ export default function Navbar() {
       setScrolled(y > 80);
       lastY.current = y;
     };
+
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    setUserName(null);
+    router.push("/");
+  };
 
   return (
     <nav
@@ -78,21 +106,20 @@ export default function Navbar() {
         }}
       >
         {/* Logo */}
-        <a
+        <Link
           href="/"
           style={{
             fontFamily: fonts.primary,
             fontWeight: 500,
             fontSize: "0.85rem",
             color: colors.cream,
-
             textDecoration: "none",
           }}
         >
           SAN
           <br />
           LUCA
-        </a>
+        </Link>
 
         {/* Desktop */}
         <div
@@ -106,6 +133,78 @@ export default function Navbar() {
           {NAV_LINKS.map((l) => (
             <NavLink key={l.label} {...l} />
           ))}
+
+          {/* Auth section */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginLeft: 8 }}>
+            {userName ? (
+              <>
+                <span style={{
+                  fontFamily: fonts.primary,
+                  fontSize: "0.62rem",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  color: colors.peru,
+                }}>
+                  Hola, {userName.split(" ")[0]}
+                </span>
+                <Link href="/dashboard" style={{
+                  fontFamily: fonts.primary,
+                  fontSize: "0.62rem",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  color: colors.cream,
+                  textDecoration: "none",
+                  border: `1px solid ${colors.peru}`,
+                  borderRadius: 999,
+                  padding: "6px 14px",
+                  transition: "all 0.2s",
+                }}>
+                  Mis Reservas
+                </Link>
+                <button onClick={handleLogout} style={{
+                  fontFamily: fonts.primary,
+                  fontSize: "0.62rem",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  color: "rgba(245,241,232,0.4)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "color 0.2s",
+                }}>
+                  Salir
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login?mode=login" style={{
+                  fontFamily: fonts.primary,
+                  fontSize: "0.62rem",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  color: "rgba(245,241,232,0.6)",
+                  textDecoration: "none",
+                  transition: "color 0.2s",
+                }}>
+                  Iniciar Sesión
+                </Link>
+                <Link href="/login?mode=register" style={{
+                  fontFamily: fonts.primary,
+                  fontSize: "0.62rem",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  color: colors.dark,
+                  textDecoration: "none",
+                  background: colors.peru,
+                  borderRadius: 999,
+                  padding: "6px 14px",
+                  transition: "background 0.2s",
+                }}>
+                  Registrar
+                </Link>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Mobile toggle */}
@@ -123,28 +222,44 @@ export default function Navbar() {
         >
           <svg width="24" height="14" viewBox="0 0 24 14" fill="none">
             <line
-              x1="0" y1="1" x2="24" y2="1"
+              x1="0"
+              y1="1"
+              x2="24"
+              y2="1"
               stroke={colors.cream}
               strokeWidth="1.5"
               style={{
                 transition: "0.3s",
-                transform: open ? "rotate(45deg) translate(4px,4px)" : "none",
+                transform: open
+                  ? "rotate(45deg) translate(4px,4px)"
+                  : "none",
                 transformOrigin: "center",
               }}
             />
             <line
-              x1="0" y1="7" x2="24" y2="7"
+              x1="0"
+              y1="7"
+              x2="24"
+              y2="7"
               stroke={colors.peru}
               strokeWidth="1.5"
-              style={{ transition: "0.3s", opacity: open ? 0 : 1 }}
+              style={{
+                transition: "0.3s",
+                opacity: open ? 0 : 1,
+              }}
             />
             <line
-              x1="6" y1="13" x2="24" y2="13"
+              x1="6"
+              y1="13"
+              x2="24"
+              y2="13"
               stroke={colors.cream}
               strokeWidth="1.5"
               style={{
                 transition: "0.3s",
-                transform: open ? "rotate(-45deg) translate(4px,-4px)" : "none",
+                transform: open
+                  ? "rotate(-45deg) translate(4px,-4px)"
+                  : "none",
                 transformOrigin: "center",
               }}
             />
@@ -166,8 +281,34 @@ export default function Navbar() {
           }}
         >
           {NAV_LINKS.map((l) => (
-            <NavLink key={l.label} {...l} />
+            <NavLink key={l.label} {...l} onClick={() => setOpen(false)} />
           ))}
+
+          <div style={{ width: "100%", height: 1, background: "rgba(186,132,60,0.2)" }} />
+
+          {userName ? (
+            <>
+              <span style={{
+                fontFamily: fonts.primary, fontSize: "0.65rem",
+                fontWeight: 800, textTransform: "uppercase", color: colors.peru,
+              }}>
+                Hola, {userName.split(" ")[0]}
+              </span>
+              <NavLink label="Mis Reservas" href="/dashboard" onClick={() => setOpen(false)} />
+              <button onClick={() => { handleLogout(); setOpen(false); }} style={{
+                fontFamily: fonts.primary, fontSize: "0.62rem", fontWeight: 800,
+                textTransform: "uppercase", color: "rgba(245,241,232,0.4)",
+                background: "none", border: "none", cursor: "pointer",
+              }}>
+                Cerrar Sesión
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink label="Iniciar Sesión" href="/login?mode=login" onClick={() => setOpen(false)} />
+              <NavLink label="Registrar" href="/login?mode=register" onClick={() => setOpen(false)} />
+            </>
+          )}
         </div>
       )}
     </nav>
