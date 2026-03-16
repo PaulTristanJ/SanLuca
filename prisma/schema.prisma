@@ -16,6 +16,7 @@ model User {
   name         String
   email        String        @unique
   phone        String
+  birthDate    DateTime?
   passwordHash String
   role         Role          @default(CUSTOMER)
   reservations Reservation[]

@@ -2,7 +2,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createReservationSchema } from "@/lib/validations";
+import { sendReservationQR } from "@/lib/whatsapp";
 import type { ApiResponse } from "@/types";
+
+const MAX_ACTIVE_RESERVATIONS = 2;
+const ACTIVE_STATUSES = ["PENDING", "CONFIRMED"] as const;
 
 // ──────────────────────────────────────────────
 // POST /api/reservations
@@ -69,7 +73,25 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 6. Crear la reserva
+        // 6. Verificar límite de reservas activas por usuario
+        const activeCount = await prisma.reservation.count({
+            where: {
+                userId,
+                status: { in: [...ACTIVE_STATUSES] },
+            },
+        });
+
+        if (activeCount >= MAX_ACTIVE_RESERVATIONS) {
+            return NextResponse.json<ApiResponse>(
+                {
+                    success: false,
+                    error: `Ya tienes ${MAX_ACTIVE_RESERVATIONS} reservas activas. Cancela una antes de crear otra.`,
+                },
+                { status: 409 }
+            );
+        }
+
+        // 7. Crear la reserva
         const reservation = await prisma.reservation.create({
             data: {
                 userId,
@@ -91,6 +113,16 @@ export async function POST(request: NextRequest) {
                 createdAt: true,
             },
         });
+
+        // 8. Enviar QR por WhatsApp (no bloquea la respuesta si falla)
+        sendReservationQR({
+            phone: reservation.guestPhone,
+            guestName: reservation.guestName,
+            date: reservation.date,
+            guests: reservation.guests,
+            sectionPreference: reservation.sectionPreference,
+            qrToken: reservation.qrToken,
+        }).catch((err) => console.error("[WhatsApp] Error enviando QR:", err));
 
         return NextResponse.json<ApiResponse>(
             {
@@ -129,12 +161,16 @@ export async function GET(request: NextRequest) {
             select: {
                 id: true,
                 guestName: true,
+                guestPhone: true,
                 date: true,
                 guests: true,
                 sectionPreference: true,
+                occasion: true,
+                notes: true,
                 status: true,
                 paymentStatus: true,
                 wantsPreOrder: true,
+                qrToken: true,
                 table: {
                     select: {
                         number: true,

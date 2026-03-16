@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const SECTIONS = ["Terraza", "Planta Alta", "Salón"] as const;
 type Section = (typeof SECTIONS)[number];
@@ -29,6 +30,13 @@ interface ReservationFormProps {
 }
 
 export function ReservationForm({ onSuccess }: ReservationFormProps) {
+    const router = useRouter();
+
+    useEffect(() => {
+        const userId = localStorage.getItem("userId");
+        if (!userId) router.push("/login?redirect=/reservation");
+    }, [router]);
+
     const [form, setForm] = useState<FormData>({
         guestName: "",
         guestPhone: "",
@@ -56,11 +64,12 @@ export function ReservationForm({ onSuccess }: ReservationFormProps) {
 
         setLoading(true);
         try {
+            const userId = localStorage.getItem("userId") ?? "";
             const res = await fetch("/api/reservations", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "x-user-id": "USER_ID_AQUI",
+                    "x-user-id": userId,
                 },
                 body: JSON.stringify({
                     ...form,
@@ -73,6 +82,7 @@ export function ReservationForm({ onSuccess }: ReservationFormProps) {
             const data = await res.json();
             if (!data.success) throw new Error(data.error);
             onSuccess?.(data.data);
+            router.push("/dashboard");
         } catch (e: unknown) {
             setError(e instanceof Error ? e.message : "Error al crear la reserva");
         } finally {
