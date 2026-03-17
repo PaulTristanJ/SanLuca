@@ -413,7 +413,7 @@ export default function MenuPageClient({ comidaDishes, brunchDishes, dbCategorie
                     </div>
 
                     <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(1rem, 3vw, 3rem)" }}>
-                        <style>{`
+                        <style suppressHydrationWarning>{`
                             @media (max-width: 640px) {
                                 .category-grid {
                                     grid-template-columns: repeat(2, 1fr) !important;
@@ -508,7 +508,7 @@ function PlatosInsignia({
                 transition: "background 0.5s ease",
             }}
         >
-            <style>{`
+            <style suppressHydrationWarning>{`
                 @media (max-width: 640px) {
                     .podium-grid {
                         grid-template-columns: 1fr !important;
